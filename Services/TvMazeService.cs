@@ -36,14 +36,16 @@ namespace TvMazeScaper.Services
         {
             var shows = await ProcessShowAsync();
 
-            // Avoid Duplicate Entries
+            // Avoid duplicate entries by checking if the show already exists
             foreach (var show in shows)
             {
                 if (!_context.Show.Any(s => s.Id == show.Id)) 
                 {
                     _context.Show.Add(show);
+                    await _context.SaveChangesAsync();
                 }
             }
+
             await _context.SaveChangesAsync();
 
             return shows;
@@ -55,35 +57,27 @@ namespace TvMazeScaper.Services
 
             foreach (var cast in castList)
             {
-                // Check if the Person already exists in the context or database
+                // Check if the Person already exists
                 var existingPerson = _context.Person.Local.FirstOrDefault(p => p.Id == cast.Person.Id)
                                     ?? _context.Person.SingleOrDefault(p => p.Id == cast.Person.Id);
 
                 if (existingPerson != null)
                 {
-                    // Use the tracked or database Person instance
-                    Console.WriteLine($"Person exists, using existing Person: {existingPerson.Id}, {existingPerson.Name}");
-                    cast.Person = existingPerson;
+                    cast.Person = existingPerson; // Use existing Person instance
                 }
                 else
                 {
-                    // Add new Person to the context
-                    Console.WriteLine($"Adding new Person: {cast.Person.Id}, {cast.Person.Name}");
-                    _context.Person.Add(cast.Person);
+                    _context.Person.Add(cast.Person); // Add new Person
                 }
 
-                // Check if the Cast already exists
-                if (!_context.Cast.Any(c => c.Id == cast.Id))
+                // Check if the Cast already exists for the same ShowId and PersonId
+                if (!_context.Cast.Any(c => c.ShowId == showId && c.PersonId == cast.Person.Id))
                 {
-                    Console.WriteLine($"Adding new Cast: {cast.Id}");
-                    _context.Cast.Add(cast);
+                    cast.ShowId = showId; // Ensure ShowId is set
+                    _context.Cast.Add(cast); // Add new Cast
                 }
             }
-
             await _context.SaveChangesAsync();
         }
-
-
     }
-
 }

@@ -7,5 +7,6 @@ public record Show
     [property: JsonPropertyName("name")] 
     public required string Name { get; set; }
 
+    public List<Cast> Cast { get; set; } = [];
     public Show() {}
 }

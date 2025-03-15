@@ -1,0 +1,7 @@
+bin/
+obj/
+*.sln
+*.csproj
+*.db
+*.db-shm
+*.db-wal

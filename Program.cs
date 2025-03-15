@@ -1,24 +1,38 @@
-﻿using TvMazeScaper.Services;
+﻿using TvMazeScaper.Data;
+using TvMazeScaper.Services;
 
-using HttpClient client = new();
-var tvMazeService = new TvMazeService(client);
+var builder = WebApplication.CreateBuilder(args);
 
-var shows = await tvMazeService.ProcessShowAsync();
-if(shows != null) 
+builder.Services.AddHttpClient<TvMazeService>();
+builder.Services.AddSqlite<TvMazeContext>("Data Source=TvMaze.db");
+
+var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
 {
-    foreach (var show in shows)
+    var service = scope.ServiceProvider.GetRequiredService<TvMazeService>();
+    
+    try
     {
-        Console.WriteLine($"Show: {show.Name} (ID: {show.Id})");
-        var castList = await tvMazeService.ProcessCastAsync(show.Id);
-        if(castList != null) 
+        // Fetch and save the shows, then get the list of all shows
+        var shows = await service.PersistShowsAsync();
+        
+        var testShows = shows.Take(10);
+        // Iterate through the shows and save the cast for each one
+        foreach (var show in testShows)
         {
-            foreach (var cast in castList ?? Enumerable.Empty<Cast>())
-            {
-                Console.WriteLine($"  ID: {cast.Person.Id}");
-                Console.WriteLine($"  Name: {cast.Person.Name}");
-                Console.WriteLine($"  Birthday: {cast.Person.Birthday?.ToShortDateString()}\n");
-            }
+            Console.WriteLine($"Fetching cast for show with ID: {show.Id}");
+            await service.PersistCastAsync(show.Id);
+
+            // Add a small delay between each request to be safe
+            await Task.Delay(500); // 500ms delay between requests
         }
     }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"An error occurred: {ex.Message}");
+    }
 }
+
+app.Run();
 

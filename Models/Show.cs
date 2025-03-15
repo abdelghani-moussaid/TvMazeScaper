@@ -1,5 +1,11 @@
 using System.Text.Json.Serialization;
-public record class Show(
-    [property: JsonPropertyName("id")] int Id,
-    [property: JsonPropertyName("name")] string Name
-);
+public record Show
+{
+    [property: JsonPropertyName("id")] 
+    public int Id { get; set; }
+
+    [property: JsonPropertyName("name")] 
+    public required string Name { get; set; }
+
+    public Show() {}
+}

@@ -12,3 +12,4 @@ C:\Repos\MentorCruise\TvMazeScaper\obj\Debug\net9.0\refint\TvMazeScaper.dll
 C:\Repos\MentorCruise\TvMazeScaper\obj\Debug\net9.0\TvMazeScaper.pdb
 C:\Repos\MentorCruise\TvMazeScaper\obj\Debug\net9.0\TvMazeScaper.genruntimeconfig.cache
 C:\Repos\MentorCruise\TvMazeScaper\obj\Debug\net9.0\ref\TvMazeScaper.dll
+C:\Repos\MentorCruise\TvMazeScaper\obj\Debug\net9.0\TvMazeScaper.sourcelink.json

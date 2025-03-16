@@ -34,14 +34,15 @@ The REST API should:
   }
 ]
 ```
+
 ## Setup
 ### 1. Clone the Repository
 ```bash
-git clone <repository_url>
+git clone https://github.com/abdelghani-moussaid/TvMazeScaper
 ```
 ### 2. Navigate to the Project Directory
 ```bash
-cd <project_directory>
+cd TvMazeScaper
 ```
 ### 3. Install Dependencies
 ```bash
@@ -56,10 +57,19 @@ dotnet ef database update
 dotnet run
 ```
 
+## Swagger Integration
+Swagger is integrated into the application to provide an interactive API documentation and testing interface.
+
+## Testing
+The application includes unit tests to cover the behavior of the services.
+
+### Running Tests
+To run the tests, use the following command:
+```bash
+dotnet test
+```
+
 ## Guidelines
 - Implemented using the latest version of .NET (.NET 9).
 - Made the solution available in a public Git repository during the review process.
-- Cover the behavior with tests. (TODO)
-
-
-
+- Covered the behavior with tests.

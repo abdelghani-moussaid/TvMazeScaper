@@ -7,7 +7,20 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddHttpClient<TvMazeService>();
 builder.Services.AddSqlite<TvMazeContext>("Data Source=TvMaze.db");
 
+// Add services to the container.
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "TvMazeScaper API V1");
+    c.RoutePrefix = string.Empty; // Set Swagger UI at the app's root
+});
 
 using (var scope = app.Services.CreateScope())
 {
